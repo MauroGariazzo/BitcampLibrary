@@ -24,9 +24,7 @@ public class ManageBooks {
 				switch(choice) {
 					case 1:						
 						Book book = createBook(new Book());
-						if(book != null) {
-							sendBookToDB(book, daoBook);
-						}
+						sendBookToDB(book, daoBook);
 						break;
 					case 2:
 						List<Book> books = daoBook.getAll();
@@ -68,10 +66,9 @@ public class ManageBooks {
 		
 		//crea nuovo autore
 		if(choiceIfCreateANewAuthor() == 1) {
-			if(!createAuthorForNewBook(author, daoAuthor)) {
-				return null;
-			}
-		}
+			createAuthorForNewBook(author, daoAuthor);
+			}	
+		
 		else {
 		//recuperalo dal DB e seleziona quello che ti interessa
 			author = ManageAuthors.choiceAuthor(daoAuthor);
@@ -80,9 +77,7 @@ public class ManageBooks {
 			if(author == null) {
 				author = new Author();
 				System.out.println("Devi prima creare un autore!");
-				if(!createAuthorForNewBook(author, daoAuthor)) {
-					return null;
-				}				
+				createAuthorForNewBook(author, daoAuthor);
 			}
 		}
 		
@@ -105,14 +100,10 @@ public class ManageBooks {
 		daoBook.delete(book);
 	}
 	
-	private static boolean createAuthorForNewBook(Author author, DAOAuthor daoAuthor) {
+	private static void createAuthorForNewBook(Author author, DAOAuthor daoAuthor) {
 		author = ManageAuthors.getAuthorObject(author);
 		int author_id = ManageAuthors.sendAuthorToDB(daoAuthor, author);
-		if(author_id > 0) {
-			author.setAuthor_id(author_id);
-			return true;
-		}
-		return false;
+		author.setAuthor_id(author_id);
 	}
 	
 			

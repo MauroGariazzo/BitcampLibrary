@@ -76,18 +76,12 @@ public class ManageAuthors {
 		int row = 1;
 		for(Author author:authors) {
 			System.out.println(row + ". " + author);
+			row++;
 		}
 	}
 	
 	public static int sendAuthorToDB(DAOAuthor daoAuthor, Author author) {
-		int author_id=-1;
-				
-		if(!author.getName().toLowerCase().equals("nessun") && !author.getSurname().toLowerCase().equals("autore")) {
-			author_id = daoAuthor.insert(author);
-		}
-		else {
-			System.out.println("Non puoi inseire un autore con questo nominativo");
-		}		
+		int author_id = daoAuthor.insert(author);
 		return author_id; //id dell'autore appena creato
 	}
 	
@@ -96,11 +90,16 @@ public class ManageAuthors {
 	}
 	private static void deleteAuthor(Author author, DAOAuthor daoAuthor) {
 		DAOBook daoBook = new DAOBook();
-		daoBook.updateAuthorBooks(author);
-		daoAuthor.delete(author);
+		int authorBooksCount = daoBook.booksCount(author);		
+		
+		if(authorBooksCount == 0) {
+			daoAuthor.delete(author);
+		}
+		else {
+			System.out.println("Non posso cancellare questo autore");
+		}
 	}
 
-	
 	public static Author choiceAuthor(DAOAuthor daoAuthor) {
 		List<Author>authors = daoAuthor.getAll(); 	
 		int input = -1;

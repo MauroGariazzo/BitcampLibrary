@@ -10,8 +10,7 @@ public class LibraryDBInitializer {
 		connector.connectToDB("");
 		createDB();
 		switchDB();
-		createTables();
-		insertNoAuthor();
+		createTables();		
 		closeConnections();
 	}
 	
@@ -52,30 +51,7 @@ public class LibraryDBInitializer {
 		catch(Exception e) {
 			e.printStackTrace();
 		}	
-	}
-	
-	private static void insertNoAuthor() {
-		String checkQuery = "SELECT COUNT(*) FROM AUTHOR WHERE author_name = ? AND author_surname = ?";
-		String insertQuery = "INSERT INTO AUTHOR(author_name, author_surname) VALUES(?,?)";
-		try{	
-			preparedStatement = connector.getPreparedStatement(checkQuery);
-			
-			preparedStatement.setString(1, "Nessun");
-			preparedStatement.setString(2, "Autore");
-			ResultSet rs = preparedStatement.executeQuery();
-			
-			if (rs.next() && rs.getInt(1) == 0) {  // Controlla se il conteggio è 0
-	            preparedStatement = connector.getPreparedStatement(insertQuery);
-	            preparedStatement.setString(1, "Nessun");
-	            preparedStatement.setString(2, "Autore");
-	            preparedStatement.executeUpdate();
-	        }
-		}
-		catch(Exception e) {
-			System.out.println("Qualcosa è andato storto");
-			e.printStackTrace();
-		}
-	}
+	}	
 	
 	private static void switchDB() {
 		String query = "USE library";

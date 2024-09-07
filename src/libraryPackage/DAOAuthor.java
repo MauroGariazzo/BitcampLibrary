@@ -18,7 +18,7 @@ public class DAOAuthor {
 	
 	public List<Author> getAll() {
 		List<Author>authors = new ArrayList<Author>();
-		String query = "SELECT * FROM Author WHERE author_name = 'Nessun' AND author_surname = 'Autore'";
+		String query = "SELECT * FROM Author";
 		
 		try {
 			stmt = connector.getStatement();

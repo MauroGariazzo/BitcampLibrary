@@ -92,19 +92,30 @@ public class DAOBook {
 		}
 	}
 	
-	public void updateAuthorBooks(Author author) {
-		String query = "UPDATE BOOK SET author_fk = 1 WHERE AUTHOR_FK = ?";
-		try {
-			pstmt = connector.getPreparedStatement(query);
-			pstmt.setInt(1, author.getAuthor_id());
-			pstmt.executeUpdate();
-		}
-		catch(Exception e) {
-			System.out.println();
-			e.printStackTrace();
-		}
-		
+	public int booksCount(Author author) {
+	    int row = 0;
+	    String query = "SELECT COUNT(*) FROM book WHERE author_fk = ?";
+	    try {
+	        pstmt = connector.getPreparedStatement(query);
+	        pstmt.setInt(1, author.getAuthor_id());
+	        ResultSet rs = pstmt.executeQuery();  // Usa executeQuery() per una SELECT
+
+	        if (rs.next()) {
+	            row = rs.getInt(1);  // Recupera il valore del COUNT(*) dal result set
+	        }
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Chiudi PreparedStatement e ResultSet se necessario per evitare memory leak
+	        try {
+	            if (pstmt != null) pstmt.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return row;  // Ritorna il conteggio dei libri
 	}
+
 	
 	public void close() {
 		connector.closeStatementConnection();
